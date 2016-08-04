@@ -45,7 +45,7 @@ input:focus {
   border-color: #c1c1c1;
 }
 
-button {
+#submit {
   width: 40px;
   height: 35px;
   border: 0;
@@ -54,6 +54,9 @@ button {
   outline: 0;
   position: relative;
   z-index: 2000;
+}
+.btn-primary {
+  margin-left: 5px;
 }
 
 /* ================================= 
