@@ -26,7 +26,7 @@ Movie Search Application
 
 - [X] Link a movie to its IMDb page. Wrap the poster image -- or everything in the li -- in an anchor tag that links a movie to its imdb.com page
 
-- [] Create a movie description page. Load or link to a description page displaying a movie's title, year, poster, plot information, and IMDb rating
+- [X] Create a movie description page. Load or link to a description page displaying a movie's title, year, poster, plot information, and IMDb rating
 
 # View Project
 [Live Demo](http://re-brand.us/projects/movie-search/index.html) of this project for peer review.
