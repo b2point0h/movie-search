@@ -5,15 +5,16 @@ $(document).ready(function (){
 		// Grab the search term value from input field
 		var searchTerm = $('#search').val().toLowerCase();
 		var searchYear = $('#year').val().toLowerCase();
+		var apikey = "6df1ff9f";
 		// Set empty HTML value for printing to page after getting search results
 		var movieHTML = "";
 		var movieModal = "";
 		$.ajax({
-			url: 'http://www.omdbapi.com/?s=' + searchTerm + '&y=' + searchYear + '&plot=full&r=json',
+			url: 'http://www.omdbapi.com/?apikey=' + apikey + '&s=' + searchTerm + '&y=' + searchYear + '&plot=full',
 			method: 'GET',
 			dataType: 'json',
 			success: function(data) { // If search is successful, create HTMl with list items of movies
-				// console.log(data);
+				 console.log(data);
 					if (data.Response === "True") {
 						$.each(data.Search, function(i, movie) {
 								movieHTML += '<li id="' + movie.imdbID + '"><div class="poster-wrap">';
@@ -44,7 +45,7 @@ $(document).ready(function (){
 					event.preventDefault();
 					var movieId = $(this).attr('id');
 					$.ajax({
-						url: 'http://www.omdbapi.com/?i=' + movieId + '&plot=full&r=json',
+						url: 'http://www.omdbapi.com/?apikey=' + apikey + '&i=' + movieId + '&plot=full',
 						method: 'GET',
 						dataType: 'json',
 						success: function(data) {
