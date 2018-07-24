@@ -1,5 +1,3 @@
-**TODO: Separate nested AJAX call **
-
 Movie Search Application
 ================================
 
