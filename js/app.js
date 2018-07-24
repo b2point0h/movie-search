@@ -1,20 +1,19 @@
 "use strict";
 $(document).ready(function (){
+	let apikey = "6df1ff9f";
 	// Search function
 	function search() {
 		// Grab the search term value from input field
-		var searchTerm = $('#search').val().toLowerCase();
-		var searchYear = $('#year').val().toLowerCase();
-		var apikey = "6df1ff9f";
-		// Set empty HTML value for printing to page after getting search results
-		var movieHTML = "";
-		var movieModal = "";
+		let searchTerm = $('#search').val().toLowerCase(),
+				searchYear = $('#year').val().toLowerCase(),				
+				// Set empty HTML value for printing to page after getting search results
+				movieHTML = "";
 		$.ajax({
 			url: 'http://www.omdbapi.com/?apikey=' + apikey + '&s=' + searchTerm + '&y=' + searchYear + '&plot=full',
 			method: 'GET',
 			dataType: 'json',
 			success: function(data) { // If search is successful, create HTMl with list items of movies
-				 console.log(data);
+				 
 					if (data.Response === "True") {
 						$.each(data.Search, function(i, movie) {
 								movieHTML += '<li id="' + movie.imdbID + '"><div class="poster-wrap">';
@@ -25,48 +24,47 @@ $(document).ready(function (){
 									}
 								movieHTML += '</div>';
 								movieHTML += '<span class="movie-title">' + movie.Title + '</span>';
-								movieHTML += '<span class="movie-year">' + movie.Year + '</span></li>';
-								
-								// Create Bootstrap modals that are populated with search results
-								movieModal += '<div class="modal fade" tabindex="-1" role="dialog" id="' + movie.imdbID + '"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + movie.Title + ' (' + movie.Year + ')' + '</h4></div>';
-								movieModal += '<div class="modal-body">' + '<img src="' + movie.Poster + '"><br><br>IMDB Rating: ' + movie.imdbRating + '<br><br>Plot Synopsis:<br>' + movie.Plot + '</div>';
-								movieModal += '<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button><a href="http://www.imdb.com/title/' + movie.imdbID +'" target="_blank"><button type="button" class="btn btn-primary">Link to IMDB</button></a></div></div></div></div>';
-						});
+								movieHTML += '<span class="movie-year">' + movie.Year + '</span></li>';																
+						});						
 					} else if (data.Response === "False") { // If the response is false and no movies are found, display message
 						movieHTML += '<li class="no-movies"><i class="material-icons icon-help">help_outline</i>No movies found that match: ' + searchTerm;
 						$('.movie-list').html(movieHTML);
 					}
 			// Add HTML to page
 			$('.movie-list').html(movieHTML); // Print the HTML with list of movies to the page
-			$('.main-content').append(movieModal); // Append the movie modals the page
-
-				$('li').click(function() {
-					var movieModal = "";
-					event.preventDefault();
-					var movieId = $(this).attr('id');
-					$.ajax({
-						url: 'http://www.omdbapi.com/?apikey=' + apikey + '&i=' + movieId + '&plot=full',
-						method: 'GET',
-						dataType: 'json',
-						success: function(data) {
-							console.log(movieId);
-								movieModal += '<div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + data.Title + ' (' + data.Year + ')' + '</h4></div>';
-								movieModal += '<div class="modal-body">' + '<img src="' + data.Poster + '"><br><br>IMDB Rating: ' + data.imdbRating + '<br><br>Plot Synopsis:<br>' + data.Plot + '</div>';
-								movieModal += '<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button><a href="http://www.imdb.com/title/' + data.imdbID +'" target="_blank"><button type="button" class="btn btn-primary">Link to IMDB</button></a></div></div></div>';
-						$('.modal.fade#' + movieId).html(movieModal).modal('show'); // Update the clicked modal
-						$('.modal.fade#' + movieId).on('hidden.bs.modal', function (e) {
-							$('.modal-backdrop.in').remove();
-						});
-
-						}
-					}); // End Second AJAX Call
-				});// End Click function
-
+				
 			},// End Success
 		}); // End AJAX Call
 	} // End Search Function
-	var delay = (function(){
-	  var timer = 0;
+
+	
+	$('#movies').on('click', "li", function(e) {		
+		
+		//Prevents the bootstrap modal from bubbling the add '.in' class to the target click
+		e.stopPropagation();
+		let movieModal = "",
+				movieId = $(this).attr('id');
+		
+		$.ajax({
+			url: 'http://www.omdbapi.com/?apikey=' + apikey + '&i=' + movieId + '&plot=full',
+			method: 'GET',
+			dataType: 'json',
+			success: function(data) {				
+					movieModal += '<div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + data.Title + ' (' + data.Year + ')' + '</h4></div>';
+					movieModal += '<div class="modal-body">' + '<img src="' + data.Poster + '"><br><br>IMDB Rating: ' + data.imdbRating + '<br><br>Plot Synopsis:<br>' + data.Plot + '</div>';
+					movieModal += '<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button><a href="http://www.imdb.com/title/' + data.imdbID +'" target="_blank"><button type="button" class="btn btn-primary">Link to IMDB</button></a></div></div>';
+			$('.modal-dialog').html(movieModal); // Update the clicked modal
+			$('#posterModal').modal('show');
+			}
+		}); // End Get Movie Info
+
+
+	});// End Click function
+
+	
+
+	let delay = (function(){
+	  let timer = 0;
 	  return function(callback, ms){
 	    clearTimeout (timer);
 	    timer = setTimeout(callback, ms);
