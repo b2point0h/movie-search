@@ -56,7 +56,7 @@ $(document).ready(function (){
 			$('.modal-dialog').html(movieModal); // Update the clicked modal
 			$('#posterModal').modal('show');
 			}
-		}); // End Get Movie Info
+		}); // End AJAX call
 
 
 	});// End Click function
